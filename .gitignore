@@ -3,7 +3,7 @@ __pycache__/
 *$py.class
 venv/
 .env
-
+.idea/
 db.sqlite3
 
 local_settings.py
