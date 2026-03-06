@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import type { JobApplication } from "../types/JobApplication"
 import api from "../api/api";
 import axios from "axios";
+import EditModal from "./EditModal";
 
 const Dashboard = () => {
     const [applications, setApplications] = useState<JobApplication[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedJob, setSelectedJob] = useState<JobApplication | null>(null);
 
     useEffect(()=>{
         api.get<JobApplication[]>('jobapplication/')
@@ -21,7 +23,7 @@ const Dashboard = () => {
             }
             setLoading(false);
         })
-    },[]);
+    },[selectedJob]);
 
     const handleDelete= async(id: number)=>{
         if(!window.confirm("Do u reallly want to delete this job application?"))
@@ -35,6 +37,8 @@ const Dashboard = () => {
             alert("Failed to remove job application")
         }
     }
+
+
 
     if(loading) return <p>Job applications are loading, please wait...</p>
 
@@ -54,16 +58,25 @@ const Dashboard = () => {
                                 <h3 className="font-semibold text-lg text-blue-600 text-left">{app.company_name}</h3>
                                 <p className="text-gray-600">{app.position} • <span className="text-sm font-medium px-6 py-1 bg-blue-100 rounded text-blue-800 ">{app.status}</span></p>
                             </div>
-                            <button 
-                                onClick={() => handleDelete(app.id)}
-                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-all text-sm font-medium shadow-sm"
-                            >
-                                Usuń
-                            </button>
+                            <div className="flex justify-evenly p-2">
+                                <button 
+                                    onClick={() => setSelectedJob(app)}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all text-sm font-medium shadow-sm mr-2"
+                                >
+                                    Edit
+                                </button>
+                                <button 
+                                    onClick={() => handleDelete(app.id)}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-all text-sm font-medium shadow-sm"
+                                >
+                                    Delete
+                                </button>
+                            </div>   
                         </li>
                     ))}
                 </ul>
             )}
+            {selectedJob && <EditModal job={selectedJob} onClose = {()=>setSelectedJob(null)}/>}
         </div>
     );
 
