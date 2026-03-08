@@ -1,5 +1,7 @@
 from django.db import models
 
+from core import settings
+
 # Create your models here.
 class JobApplication(models.Model):
     STATUS_CHOICES = [
@@ -8,6 +10,11 @@ class JobApplication(models.Model):
         ("rejected", "Rejected"),
         ("offer", "Offer"),
     ]
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.CASCADE,
+        related_name = "jobapplications"
+    )
 
     company_name = models.CharField(max_length=100)
     position = models.CharField(max_length=100)

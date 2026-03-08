@@ -17,12 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from users.views import RegisterView
 from tracker.views import JobApplicationViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 router = DefaultRouter()
-router.register(r'jobapplication', JobApplicationViewSet)
+router.register(r'jobapplication', JobApplicationViewSet, basename='jobapplication')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',  include(router.urls)),
+    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/register/',RegisterView.as_view(), name = 'auth_register' ),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
