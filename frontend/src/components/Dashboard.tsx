@@ -12,6 +12,7 @@ const Dashboard = () => {
     useEffect(()=>{
         api.get<JobApplication[]>('jobapplication/')
         .then(res => {
+            console.log(res.data)
             setApplications(res.data);
             setLoading(false);
         }).catch(err => {
