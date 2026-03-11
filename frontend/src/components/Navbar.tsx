@@ -20,7 +20,7 @@ const Navbar = () => {
         : "text-white/60 hover:bg-[#455F99]/30 hover:text-white";
 
     return (
-        <div className="flex flex-col h-screen bg-gradient-to-br from-[#1b253b] to-[#2a4571] w-64 border-r border-white/5">
+        <div className="flex flex-col h-screen bg-linear-to-br from-[#1b253b] to-[#2a4571] w-64 border-r border-white/5">
             <div className="flex items-center gap-3 p-8 mb-4">
                 <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
                     <div className="w-4 h-4 border-2 border-white rounded-sm"></div>
