@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/api";
 import InputField from "./InputField";
+import DropdownMenu from "./DropdownMenu";
 
 interface AddModalProps {
   onJobAdded: () => void;
@@ -13,7 +14,13 @@ const AddModal = ({ onJobAdded, onClose }: AddModalProps) => {
     position: '',
     status: 'applied',
   });
-
+  const [openDropdownMenu, setOpenDropdownMenu] = useState(false);
+  const buttons = [
+    {label: "applied"},
+    {label: "offer"},
+    {label: "interview"},
+    {label: "rejected"},
+  ]
   const handleAdd = async () => {
     try {
       await api.post('jobapplication/', formData);
@@ -33,10 +40,18 @@ const AddModal = ({ onJobAdded, onClose }: AddModalProps) => {
     });
   };
 
+  const handleSelectStatus = (selectedStatus: string) =>{
+    setFormData((prev)=>({
+      ...prev,
+      status: selectedStatus,
+    }));
+    setOpenDropdownMenu(false);
+  }
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
       <form
-        className="bg-[#253352] p-8 rounded-2xl shadow-2xl flex flex-col gap-5 min-w-[450px] border border-white/10"
+        className="bg-[#253352] p-8 rounded-2xl shadow-2xl flex flex-col gap-5 min-w-112.5 border border-white/10"
         onSubmit={(e) => {
           e.preventDefault();
           handleAdd();
@@ -47,7 +62,7 @@ const AddModal = ({ onJobAdded, onClose }: AddModalProps) => {
           <p className="text-white/50 text-sm mt-1">Fill in the details of your new application</p>
         </div>
 
-        <div className="space-y-4">
+        <div className="relative space-y-4">
           <InputField 
             label="Company" 
             name="company_name" 
@@ -63,9 +78,13 @@ const AddModal = ({ onJobAdded, onClose }: AddModalProps) => {
           <InputField 
             label="Status" 
             name="status" 
+            readOnly
             value={formData.status} 
-            onChange={handleChange} 
+            onChange={handleChange}
+            onClick={()=>setOpenDropdownMenu(!openDropdownMenu)}
           />
+          {openDropdownMenu && <DropdownMenu options={buttons} onSelect={handleSelectStatus}/>}
+          
         </div>
 
         <div className="flex gap-3 mt-6">
